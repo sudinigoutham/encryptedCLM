@@ -17,7 +17,7 @@
 # MAGIC %sql
 # MAGIC
 # MAGIC DECLARE OR REPLACE VARIABLE new_catalog STRING;
-# MAGIC SET VAR new_catalog = :catalog;
+# MAGIC SET VAR new_catalog = :`bundle.catalog`;
 # MAGIC SELECT new_catalog;
 
 # COMMAND ----------
