@@ -3,9 +3,11 @@
 # MAGIC
 # MAGIC # Catalog and Schema Set Up
 # MAGIC
+# MAGIC ***
+# MAGIC
 # MAGIC The purpose of this notebook is to create the "hv_claims" schema if it doesn't already exist in the catalog of choice.  
 # MAGIC
-# MAGIC The "catalog" parameter is used to dynamically set the catalog that the "hv_claims" schema will be created and the free Databricks Marketplace Health Variety Claims sample data will be copied into.  
+# MAGIC The "catalog" parameter is used to dynamically set the catalog that the "hv_claims" schema will be created and the free Databricks Marketplace Health Verity Claims sample data will be copied into.  
 # MAGIC
 # MAGIC Note that while this notebook is entirely SQL statements that the "CREATE CATALOG" statement may not be run against a serverless DBSQL warehouse endpoint, therefore generic serverless (or classic) compute is utilized for this notebook task.  
 

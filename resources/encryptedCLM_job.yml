@@ -3,6 +3,7 @@ resources:
   jobs:
     encryptedCLM_job:
       name: encryptedCLM_job
+      description: Set Up for a Health & Life Sciences Demo of Unity Catalog's Column Level Masking Features Using a Symmetric Encrpytion Method 
 
       schedule:
         # Run every day at 8:37 AM
@@ -14,16 +15,24 @@ resources:
           - matthew.giglia@databricks.com
 
       tasks:
-        - task_key: notebook_task
-          job_cluster_key: job_cluster
+        - task_key: catalog_schema_setup
+          description: Creates the catalog and schema for the demo's data.  
+          # job_cluster_key: job_cluster
           notebook_task:
-            notebook_path: ../src/notebook.ipynb
+            notebook_path: ../src/catalog_schema_setup.py
+        - task_key: available_hv_data
+          description: Determines the Health Verity tables available to copy.  
+          depends_on:
+            - task_key: catalog_schema_setup
+          notebook_task:
+            notebook_path: ../src/available_hv_data.py
+          
         
-      job_clusters:
-        - job_cluster_key: job_cluster
-          new_cluster:
-            spark_version: 13.3.x-scala2.12
-            node_type_id: i3.xlarge
-            autoscale:
-                min_workers: 1
-                max_workers: 4
+      # job_clusters:
+      #   - job_cluster_key: job_cluster
+      #     new_cluster:
+      #       spark_version: 13.3.x-scala2.12
+      #       node_type_id: i3.xlarge
+      #       autoscale:
+      #           min_workers: 1
+      #           max_workers: 4
