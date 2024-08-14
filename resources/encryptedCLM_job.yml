@@ -35,7 +35,7 @@ resources:
             task:
               task_key: table_creation_iteration
               notebook_task:
-                notebook_path: ../src/create_or_replace_tables.py
+                notebook_path: ../src/create_or_replace_tables.sql
                 base_parameters:
                   table_name: "{{input}}"
                 warehouse_id: ${warehouse_id}
