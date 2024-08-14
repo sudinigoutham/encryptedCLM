@@ -26,6 +26,19 @@ resources:
             - task_key: catalog_schema_setup
           notebook_task:
             notebook_path: ../src/available_hv_data.py
+        - task_key: table_creation
+          depends_on:
+            - task_key: available_hv_data
+          for_each_task:
+            inputs: "{{tasks.[available_hv_data].values.[hv_tables]}}"
+            concurrency: 6
+            task:
+              task_key: table_creation_iteration
+              notebook_task:
+                notebook_path: ../src/create_or_replace_tables.py
+                base_parameters:
+                  table_name: "{{input}}"
+                warehouse_id: ${warehouse_id}
           
         
       # job_clusters:
