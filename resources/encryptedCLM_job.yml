@@ -46,6 +46,12 @@ resources:
           notebook_task:
             notebook_path: ../src/register_sql_udfs.sql
             warehouse_id: ${var.warehouse_id}
+        - task_key: encrpyption_key
+          description: Determines the Health Verity tables available to copy.  
+          depends_on:
+            - task_key: register_sql_udfs
+          notebook_task:
+            notebook_path: ../src/encrpyption_key.py
           
         
       # job_clusters:
