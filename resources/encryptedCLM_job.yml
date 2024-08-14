@@ -38,7 +38,7 @@ resources:
                 notebook_path: ../src/create_or_replace_tables.sql
                 base_parameters:
                   table_name: "{{input}}"
-                warehouse_id: ${warehouse_id}
+                warehouse_id: ${var.warehouse_id}
           
         
       # job_clusters:
