@@ -39,6 +39,13 @@ resources:
                 base_parameters:
                   table_name: "{{input}}"
                 warehouse_id: ${var.warehouse_id}
+        - task_key: register_sql_udfs
+          description: Determines the Health Verity tables available to copy.  
+          depends_on:
+            - task_key: catalog_schema_setup
+          notebook_task:
+            notebook_path: ../src/register_sql_udfs.sql
+            warehouse_id: ${var.warehouse_id}
           
         
       # job_clusters:
