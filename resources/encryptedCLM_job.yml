@@ -51,7 +51,7 @@ resources:
           depends_on:
             - task_key: register_sql_udfs
           notebook_task:
-            notebook_path: ../src/encrpyption_key.py
+            notebook_path: ../src/set_encrpyption_key.py
           
         
       # job_clusters:
