@@ -5,6 +5,11 @@
 
 # COMMAND ----------
 
+import time
+int(time.time())
+
+# COMMAND ----------
+
 from cryptography.fernet import Fernet
 
 # Generate a key
@@ -44,7 +49,7 @@ dbutils.widgets.text("encryption_key", "4cXmMFsSKYg5Y3VVhhDGaNLGCbrptDAo7LaW8hUC
 # MAGIC AS $$
 # MAGIC   import cryptography.fernet as fernet
 # MAGIC   cipher_suite = fernet.Fernet(key.encode())
-# MAGIC   encrypted_text = cipher_suite.encrypt(input_text.encode())
+# MAGIC   encrypted_text = cipher_suite.encrypt_at_time(input_text.encode(), 1723705758)
 # MAGIC   return encrypted_text.decode()
 # MAGIC $$;
 
@@ -195,3 +200,7 @@ dbutils.widgets.text("encryption_key", "4cXmMFsSKYg5Y3VVhhDGaNLGCbrptDAo7LaW8hUC
 # MAGIC where 
 # MAGIC   t1.decrpyted_patient_id = t2.patient_id
 # MAGIC ;
+
+# COMMAND ----------
+
+

@@ -12,7 +12,7 @@ LANGUAGE PYTHON
 AS $$
   import cryptography.fernet as fernet
   cipher_suite = fernet.Fernet(key.encode())
-  encrypted_text = cipher_suite.encrypt(input_text.encode())
+  encrypted_text = cipher_suite.encrypt_at_time(input_text.encode(), 1723705758)
   return encrypted_text.decode()
 $$;
 
