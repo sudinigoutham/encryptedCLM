@@ -27,6 +27,7 @@ spark.sql(function_stmnt)
 
 # COMMAND ----------
 
-# MAGIC %sql
-# MAGIC
-# MAGIC select encryption_mask('hello'), decrypt_text(encryption_mask('hello'), secret('encryptionCLM-demo', 'encryption_key')); 
+# %sql
+
+# select encryption_mask('hello'), decrypt_text(encryption_mask('hello'), secret('encryptionCLM-demo', 'encryption_key'))
+# ; 
