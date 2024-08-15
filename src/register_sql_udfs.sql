@@ -53,7 +53,7 @@ LANGUAGE PYTHON
 AS $$
   from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
   from cryptography.hazmat.backends import default_backend
-  encrypted_message_bytes = bytes.fromhex(encrypted_message)
+  encrypted_message_bytes = bytes.fromhex(input_text)
   backend = default_backend()
   key_bytes = key.to_bytes(32, byteorder='big')  # Adjust key size as needed
   cipher = Cipher(algorithms.AES(key_bytes), modes.ECB(), backend=backend)
