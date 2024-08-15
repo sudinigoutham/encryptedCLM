@@ -3,7 +3,7 @@ DECLARE OR REPLACE VARIABLE catalog_use STRING;
 DECLARE OR REPLACE VARIABLE tableName STRING;
 
 SET VAR catalog_use = :`bundle.catalog`; 
-SET VAR tableName = :table;
+SET VAR tableName = :table_name;
 
 SELECT catalog_use, tableName;
 
