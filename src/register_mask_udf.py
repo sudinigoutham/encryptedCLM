@@ -16,7 +16,7 @@ display(spark.sql("select current_catalog(), current_schema()"))
 function_stmnt = f"""
   CREATE OR REPLACE FUNCTION encryption_mask(input_text STRING)
   RETURN CASE
-    when IS_MEMBER('encryptionCLM_demo_mask') then {catalog_use}.hv_claims.encrypt_text(input_text, secret('encryptionCLM-demo', 'encryption_key'))
+    when IS_MEMBER('encryptionCLM_demo_mask') then {catalog_use}.hv_claims.encrypt_text(COALESCE(input_text, ""), secret('encryptionCLM-demo', 'encryption_key'))
     else input_text 
   END;
 """

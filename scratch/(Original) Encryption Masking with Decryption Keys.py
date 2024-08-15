@@ -195,9 +195,3 @@ dbutils.widgets.text("encryption_key", "4cXmMFsSKYg5Y3VVhhDGaNLGCbrptDAo7LaW8hUC
 # MAGIC where 
 # MAGIC   t1.decrpyted_patient_id = t2.patient_id
 # MAGIC ;
-
-# COMMAND ----------
-
-# MAGIC %sql 
-# MAGIC
-# MAGIC
