@@ -27,16 +27,3 @@ AS $$
   decrypted_text = cipher_suite.decrypt(input_text.encode())
   return decrypted_text.decode()
 $$;
-
--- COMMAND ----------
-
-CREATE OR REPLACE FUNCTION IDENTIFIER(catalog_use || '.hv_claims.encryption_mask') (input_text STRING)
-RETURNS STRING
-LANGUAGE PYTHON
-AS $$
-  key = dbutils.secrets.get(scope='encryptionCLM-demo', key='encryption_key')
-  if IS_ACCOUNT_GROUP_MEMBER('encryptionCLM_demo_mask'):
-    return IDENTIFIER(catalog_use || '.hv_claims.encrypt_text')(input_text, key)
-  else:
-    return input_text
-$$;

@@ -39,6 +39,12 @@ resources:
           notebook_task:
             notebook_path: ../src/register_sql_udfs.sql
             warehouse_id: ${var.warehouse_id}
+        - task_key: register_mask_udf
+          description: Register the masking function 
+          depends_on:
+            - task_key: register_sql_udfs
+          notebook_task:
+            notebook_path: ../src/register_mask_udf.py
         - task_key: available_hv_data
           description: Determines the Health Verity tables available to copy.  
           depends_on:
