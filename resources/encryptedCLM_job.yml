@@ -104,6 +104,7 @@ resources:
           depends_on:
             - task_key: apply_tags_npi
             - task_key: apply_tags_patient_id
+            - task_key: register_mask_udf
           run_if: ALL_SUCCEEDED
           notebook_task:
             notebook_path: ../src/apply_mask.py
