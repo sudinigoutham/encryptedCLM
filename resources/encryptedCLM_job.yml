@@ -24,6 +24,21 @@ resources:
           description: Creates a workspace group to add users for encrpytion masking at the column level.  
           notebook_task:
             notebook_path: ../src/create_mask_group.py
+        - task_key: set_encrpyption_key
+          description: Sets an encrpytion key to use for the demo in a Databricks Secret  
+          depends_on:
+            - task_key: create_mask_group
+          notebook_task:
+            notebook_path: ../src/set_encrpytion_key.py
+        - task_key: register_sql_udfs
+          description: Register SQL UDFs to encrpyting text and decrpyting text  
+          depends_on:
+            - task_key: catalog_schema_setup
+            - task_key: set_encrpyption_key
+          run_if: ALL_SUCCEEDED
+          notebook_task:
+            notebook_path: ../src/register_sql_udfs.sql
+            warehouse_id: ${var.warehouse_id}
         - task_key: available_hv_data
           description: Determines the Health Verity tables available to copy.  
           depends_on:
@@ -44,19 +59,8 @@ resources:
                 base_parameters:
                   table_name: "{{input}}"
                 warehouse_id: ${var.warehouse_id}
-        - task_key: register_sql_udfs
-          description: Register SQL UDFs to encrpyting text and decrpyting text  
-          depends_on:
-            - task_key: catalog_schema_setup
-          notebook_task:
-            notebook_path: ../src/register_sql_udfs.sql
-            warehouse_id: ${var.warehouse_id}
-        - task_key: set_encrpyption_key
-          description: Sets an encrpytion key to use for the demo in a Databricks Secret  
-          depends_on:
-            - task_key: register_sql_udfs
-          notebook_task:
-            notebook_path: ../src/set_encrpytion_key.py
+
+
           
         
       # job_clusters:
