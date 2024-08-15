@@ -59,6 +59,40 @@ resources:
                 base_parameters:
                   table_name: "{{input}}"
                 warehouse_id: ${var.warehouse_id}
+        - task_key: tables_with_pii
+          description: Determines which tables have pii (patient_id and/or npi) 
+          depends_on:
+            - task_key: table_creation
+          notebook_task:
+            notebook_path: ../src/tables_with_pii.py
+        - task_key: apply_tags_patient_id
+          description: Applies the pii = true tag to the patient_id column  
+          depends_on:
+            - task_key: tables_with_pii
+          for_each_task:
+            inputs: "{{tasks.[tables_with_pii].values.[patient_id_tables]}}"
+            concurrency: 6
+            task:
+              task_key: apply_tags_patient_id_iteration
+              notebook_task:
+                notebook_path: ../src/apply_tags_patient_id.sql
+                base_parameters:
+                  table_name: "{{input}}"
+                warehouse_id: ${var.warehouse_id}
+        - task_key: apply_tags_npi
+          description: Applies the pii = true tag to the npi column  
+          depends_on:
+            - task_key: tables_with_pii
+          for_each_task:
+            inputs: "{{tasks.[tables_with_pii].values.[npi_tables]}}"
+            concurrency: 6
+            task:
+              task_key: apply_tags_npi_iteration
+              notebook_task:
+                notebook_path: ../src/apply_tags_npi.sql
+                base_parameters:
+                  table_name: "{{input}}"
+                warehouse_id: ${var.warehouse_id}
 
 
           
