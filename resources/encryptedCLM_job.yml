@@ -99,6 +99,14 @@ resources:
                 base_parameters:
                   table_name: "{{input}}"
                 warehouse_id: ${var.warehouse_id}
+        - task_key: apply_mask
+          description: Register SQL UDFs to encrpyting text and decrpyting text  
+          depends_on:
+            - task_key: apply_tags_npi
+            - task_key: apply_tags_patient_id
+          run_if: ALL_SUCCEEDED
+          notebook_task:
+            notebook_path: ../src/apply_mask.py
 
 
           
