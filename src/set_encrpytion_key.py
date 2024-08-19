@@ -9,18 +9,10 @@ dbutils.library.restartPython()
 
 # COMMAND ----------
 
-# DBTITLE 1,Import the Cryptography Package
-from cryptography.fernet import Fernet
+# DBTITLE 1,Generating a Secure Hexadecimal Token in Python
+import secrets
 
-# Generate a key
-key = Fernet.generate_key().decode()
-
-# COMMAND ----------
-
-# DBTITLE 1,Generating Hexadecimal Salt Using Python
-import os
-
-salt = os.urandom(16).hex()
+key = secrets.token_hex(32)
 
 # COMMAND ----------
 
@@ -54,7 +46,7 @@ if encryption_demo_exists == True:
 else:
   w.secrets.create_scope(scope='encryptionCLM-demo')
   w.secrets.put_secret(scope='encryptionCLM-demo', key='encryption_key', string_value=key)
-  w.secrets.put_secret(scope='encryptionCLM-demo', key='encryption_salt', string_value=salt)
+  # w.secrets.put_secret(scope='encryptionCLM-demo', key='encryption_salt', string_value=salt)
 
 # COMMAND ----------
 
@@ -65,3 +57,22 @@ dbutils.secrets.get(scope='encryptionCLM-demo', key='encryption_key')
 
 # DBTITLE 1,Retrieving Encryption Salt from Databricks Secrets
 dbutils.secrets.get(scope='encryptionCLM-demo', key='encryption_salt')
+
+# COMMAND ----------
+
+# w.secrets.delete_secret(scope='encryptionCLM-demo', key='encryption_salt', string_value=salt)
+
+# COMMAND ----------
+
+# DBTITLE 1,Import the Cryptography Package
+# from cryptography.fernet import Fernet
+
+# # Generate a key
+# key = Fernet.generate_key().decode()
+
+# COMMAND ----------
+
+# DBTITLE 1,Generating Hexadecimal Salt Using Python
+# import os
+
+# salt = os.urandom(16).hex()
