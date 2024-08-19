@@ -30,83 +30,54 @@ SELECT catalog_use;
 
 -- COMMAND ----------
 
-CREATE OR REPLACE FUNCTION IDENTIFIER(catalog_use || '.hv_claims.encrypt_text') (input_text STRING, key_str STRING, salt STRING)
+CREATE OR REPLACE FUNCTION IDENTIFIER(catalog_use || '.hv_claims.encrypt_text') (input_text STRING, key STRING)
 RETURNS STRING
 LANGUAGE PYTHON
 AS $$
-  from cryptography.hazmat.primitives import padding
   from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
   from cryptography.hazmat.backends import default_backend
-  from cryptography.hazmat.primitives import hashes
-  from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-  import base64
 
   backend = default_backend()
-  kdf = PBKDF2HMAC(
-        algorithm=hashes.SHA256(),
-        length=32,
-        salt=bytes.fromhex(salt),
-        iterations=100000,
-        backend=backend
-    )
-  key = base64.urlsafe_b64decode(key_str)
-  key_bytes = kdf.derive(key)
-  cipher = Cipher(algorithms.AES(key_bytes), modes.ECB(), backend=backend)
+  cipher = Cipher(algorithms.AES(bytes.fromhex(key)), modes.ECB(), backend=backend)
   encryptor = cipher.encryptor()
-  padder = padding.PKCS7(128).padder()
-  padded_data = padder.update(input_text.encode()) + padder.finalize()
-  encrypted_message = encryptor.update(padded_data) + encryptor.finalize()
-  return base64.urlsafe_b64encode(encrypted_message).decode()
+  padded_message = input_text + ' ' * (16 - len(input_text) % 16)  # Padding to ensure block size compatibility
+  encrypted_message = encryptor.update(padded_message.encode()) + encryptor.finalize()
+  return encrypted_message.hex()
 $$;
 
 -- COMMAND ----------
 
-CREATE OR REPLACE FUNCTION IDENTIFIER(catalog_use || '.hv_claims.decrypt_text') (input_text STRING, key_str STRING, salt STRING)
+CREATE OR REPLACE FUNCTION IDENTIFIER(catalog_use || '.hv_claims.decrypt_text') (input_text STRING, key STRING)
 RETURNS STRING
 LANGUAGE PYTHON
 AS $$
-  from cryptography.hazmat.primitives import padding
   from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
   from cryptography.hazmat.backends import default_backend
-  from cryptography.hazmat.primitives import hashes
-  from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-  import base64
 
+  encrypted_message_bytes = bytes.fromhex(input_text)
   backend = default_backend()
-  kdf = PBKDF2HMAC(
-        algorithm=hashes.SHA256(),
-        length=32,
-        salt=bytes.fromhex(salt),
-        iterations=100000,
-        backend=backend
-    )
-  key = base64.urlsafe_b64decode(key_str)
-  key_bytes = kdf.derive(key)
-  cipher = Cipher(algorithms.AES(key_bytes), modes.ECB(), backend=backend)
+  cipher = Cipher(algorithms.AES(bytes.fromhex(key)), modes.ECB(), backend=backend)
   decryptor = cipher.decryptor()
-  encrypted_message_bytes = base64.urlsafe_b64decode(input_text)
-  decrypted_padded_message = decryptor.update(encrypted_message_bytes) + decryptor.finalize()
-  unpadder = padding.PKCS7(128).unpadder()
-  decrypted_message = unpadder.update(decrypted_padded_message) + unpadder.finalize()
-  return decrypted_message.decode()
+  decrypted_message = decryptor.update(encrypted_message_bytes) + decryptor.finalize()
+  return decrypted_message.rstrip().decode()
 $$;
 
 -- COMMAND ----------
 
 EXECUTE IMMEDIATE "select 
-  IDENTIFIER(catalog_use || '.hv_claims.encrypt_text')('Spark is awesome', secret('encryptionCLM-demo', 'encryption_key'), secret('encryptionCLM-demo', 'encryption_salt')) as encrypted_text"
+  IDENTIFIER(catalog_use || '.hv_claims.encrypt_text')('Spark is awesome', secret('encryptionCLM-demo', 'encryption_key')) as encrypted_text"
 
 -- COMMAND ----------
 
 EXECUTE IMMEDIATE "select
-  IDENTIFIER(catalog_use || '.hv_claims.decrypt_text')('6Mxhau5IcNtDb2r2_Bcez_6wRrCWd7tTe92ii4vBZJQ=', secret('encryptionCLM-demo', 'encryption_key'), secret('encryptionCLM-demo', 'encryption_salt')) as decrypted_text"
+  IDENTIFIER(catalog_use || '.hv_claims.decrypt_text')('edc3528531b87f36999f27a9302f18ebec93a785b2dfc4c8a2c3468983538aa2', secret('encryptionCLM-demo', 'encryption_key')) as decrypted_text"
 
 -- COMMAND ----------
 
 EXECUTE IMMEDIATE "select
-  IDENTIFIER(catalog_use || '.hv_claims.encrypt_text')('93af469dadce578e4e9f06baf77dcefd', secret('encryptionCLM-demo', 'encryption_key'), secret('encryptionCLM-demo', 'encryption_salt')) as encrypted_text"
+  IDENTIFIER(catalog_use || '.hv_claims.encrypt_text')('93af469dadce578e4e9f06baf77dcefd', secret('encryptionCLM-demo', 'encryption_key')) as encrypted_text"
 
 -- COMMAND ----------
 
 EXECUTE IMMEDIATE "select
-  IDENTIFIER(catalog_use || '.hv_claims.decrypt_text')('kkLIdfgKML6boY6Ke2ivN_OexlrJILJGKWUNC0fXaR_-sEawlne7U3vdoouLwWSU', secret('encryptionCLM-demo', 'encryption_key'), secret('encryptionCLM-demo', 'encryption_salt')) as decrypted_text"
+  IDENTIFIER(catalog_use || '.hv_claims.decrypt_text')('b27255cf9a42956037a4aea4f80137a150a3b8a92cb298166e6b7468ec7a2837ec93a785b2dfc4c8a2c3468983538aa2', secret('encryptionCLM-demo', 'encryption_key')) as decrypted_text"
