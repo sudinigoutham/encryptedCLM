@@ -21,7 +21,7 @@ function_stmnt = f"""
   CREATE OR REPLACE FUNCTION encryption_mask(input_text STRING)
   RETURN CASE
     when IS_MEMBER('encryptionCLM_demo_mask') then input_text
-    else {catalog_use}.hv_claims.encrypt_text(input_text, secret('encryptionCLM-demo', 'encryption_key'), secret('encryptionCLM-demo', 'encryption_salt')) 
+    else {catalog_use}.hv_claims.encrypt_text(input_text, secret('encryptionCLM-demo', 'encryption_key')) 
   END;
 """
 
@@ -36,7 +36,7 @@ spark.sql(function_stmnt)
 function_stmnt = f"""
   CREATE OR REPLACE FUNCTION decryption_mask(input_text STRING)
   RETURN CASE
-    when IS_MEMBER('encryptionCLM_demo_mask') then {catalog_use}.hv_claims.decrypt_text(input_text, secret('encryptionCLM-demo', 'encryption_key'), secret('encryptionCLM-demo', 'encryption_salt')) 
+    when IS_MEMBER('encryptionCLM_demo_mask') then {catalog_use}.hv_claims.decrypt_text(input_text, secret('encryptionCLM-demo', 'encryption_key')) 
     else input_text
   END;
 """
