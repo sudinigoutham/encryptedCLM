@@ -111,6 +111,10 @@ salt_hex
 
 # COMMAND ----------
 
+from databricks.sdk import dbutils
+
+# COMMAND ----------
+
 salt_bytes = bytes.fromhex(salt_hex)
 
 # COMMAND ----------
