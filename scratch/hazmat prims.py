@@ -72,6 +72,50 @@ decrypt_message('b0a74079c722720d676fdcd84c0ba3378601552a448929f26ee69e7e55e507d
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC Switch to use a bytes style key directly.  
+
+# COMMAND ----------
+
+import secrets
+
+key = secrets.token_bytes(32)
+
+# COMMAND ----------
+
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
+
+def encrypt_message(message, key):
+    backend = default_backend()
+    cipher = Cipher(algorithms.AES(key), modes.ECB(), backend=backend)
+    encryptor = cipher.encryptor()
+    padded_message = message + ' ' * (16 - len(message) % 16)  # Padding to ensure block size compatibility
+    encrypted_message = encryptor.update(padded_message.encode()) + encryptor.finalize()
+    return encrypted_message.hex()
+
+def decrypt_message(encrypted_message, key):
+    encrypted_message_bytes = bytes.fromhex(encrypted_message)
+    backend = default_backend()
+    cipher = Cipher(algorithms.AES(key), modes.ECB(), backend=backend)
+    decryptor = cipher.decryptor()
+    decrypted_message = decryptor.update(encrypted_message_bytes) + decryptor.finalize()
+    return decrypted_message.rstrip().decode()  # Remove padding and decode
+
+# COMMAND ----------
+
+encrypt_message("Spark is awesome", key)
+
+# COMMAND ----------
+
+decrypt_message('408749fe92296692ccc1c8225587973d47b5be4debd651664b1970028d7d6fea', key)
+
+# COMMAND ----------
+
+decrypt_message(encrypt_message("This should work fine!", key), key)
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC
 # MAGIC We can make the key more complicated by using the same method as the Fernet class, and supply a salt that is truly random using the os.urandom method.  If the key and the salt are stored and used the same, then the value returned from the encrpytion function will always be the same, otherwise if we allow the salt to vary we can have different encrpyted strings, but the key will decrypt the message.  
 
@@ -91,11 +135,11 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 import base64
-import os
+import secrets
 
 # COMMAND ----------
 
-salt = os.urandom(16)
+salt = secrets.token_bytes(16)
 
 # COMMAND ----------
 

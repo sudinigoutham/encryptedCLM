@@ -100,3 +100,13 @@ EXECUTE IMMEDIATE "select
 
 EXECUTE IMMEDIATE "select
   IDENTIFIER(catalog_use || '.hv_claims.decrypt_text')('6Mxhau5IcNtDb2r2_Bcez_6wRrCWd7tTe92ii4vBZJQ=', secret('encryptionCLM-demo', 'encryption_key'), secret('encryptionCLM-demo', 'encryption_salt')) as decrypted_text"
+
+-- COMMAND ----------
+
+EXECUTE IMMEDIATE "select
+  IDENTIFIER(catalog_use || '.hv_claims.encrypt_text')('93af469dadce578e4e9f06baf77dcefd', secret('encryptionCLM-demo', 'encryption_key'), secret('encryptionCLM-demo', 'encryption_salt')) as encrypted_text"
+
+-- COMMAND ----------
+
+EXECUTE IMMEDIATE "select
+  IDENTIFIER(catalog_use || '.hv_claims.decrypt_text')('kkLIdfgKML6boY6Ke2ivN_OexlrJILJGKWUNC0fXaR_-sEawlne7U3vdoouLwWSU', secret('encryptionCLM-demo', 'encryption_key'), secret('encryptionCLM-demo', 'encryption_salt')) as decrypted_text"
