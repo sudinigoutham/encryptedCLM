@@ -1,12 +1,22 @@
 # Databricks notebook source
-# MAGIC %md
-# MAGIC
-# MAGIC
+import time
+int(time.time())
 
 # COMMAND ----------
 
-import time
-int(time.time())
+import os
+import random
+
+# Set a seed for os.urandom()
+random.seed()
+
+# COMMAND ----------
+
+help(random.seed)
+
+# COMMAND ----------
+
+help(os.urandom)
 
 # COMMAND ----------
 
@@ -47,11 +57,28 @@ dbutils.widgets.text("encryption_key", "4cXmMFsSKYg5Y3VVhhDGaNLGCbrptDAo7LaW8hUC
 # MAGIC RETURNS STRING
 # MAGIC LANGUAGE PYTHON
 # MAGIC AS $$
+# MAGIC   from random import seed
+# MAGIC   seed(327)
 # MAGIC   import cryptography.fernet as fernet
 # MAGIC   cipher_suite = fernet.Fernet(key.encode())
 # MAGIC   encrypted_text = cipher_suite.encrypt_at_time(input_text.encode(), 1723705758)
 # MAGIC   return encrypted_text.decode()
 # MAGIC $$;
+
+# COMMAND ----------
+
+import pyspark.sql.functions as F
+
+# Generate a DataFrame with a single row containing a random number
+df_random = spark.range(1).select(F.rand().alias("random_number"))
+
+display(df_random)
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC
+# MAGIC select encrypt_text("my message", :encryption_key) as secret_message;
 
 # COMMAND ----------
 

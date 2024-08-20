@@ -9,11 +9,10 @@ dbutils.library.restartPython()
 
 # COMMAND ----------
 
-# DBTITLE 1,Import the Cryptography Package
-from cryptography.fernet import Fernet
+# DBTITLE 1,Generating a Secure Hexadecimal Token in Python
+import secrets
 
-# Generate a key
-key = Fernet.generate_key().decode()
+key = secrets.token_hex(32)
 
 # COMMAND ----------
 
@@ -50,5 +49,5 @@ else:
 
 # COMMAND ----------
 
-# DBTITLE 1,Retrieving Encryption Key with DBUtils Secrets
+# DBTITLE 1,Retrieving Encryption Key from Databricks Secrets
 dbutils.secrets.get(scope='encryptionCLM-demo', key='encryption_key')
