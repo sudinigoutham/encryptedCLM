@@ -1,4 +1,5 @@
 -- Databricks notebook source
+-- DBTITLE 1,SQL Code for Setting Catalog Use Variable
 DECLARE OR REPLACE VARIABLE catalog_use STRING;
 
 SET VAR catalog_use = :`bundle.catalog`; 
@@ -6,6 +7,7 @@ SELECT catalog_use;
 
 -- COMMAND ----------
 
+-- DBTITLE 1,SQL UDF For Encrypting Text Fields
 CREATE OR REPLACE FUNCTION IDENTIFIER(catalog_use || '.hv_claims.encrypt_text') (input_text STRING, key STRING)
 RETURNS STRING
 LANGUAGE PYTHON
@@ -23,6 +25,7 @@ $$;
 
 -- COMMAND ----------
 
+-- DBTITLE 1,SQL UDF For Decrypting Text Fields
 CREATE OR REPLACE FUNCTION IDENTIFIER(catalog_use || '.hv_claims.decrypt_text') (input_text STRING, key STRING)
 RETURNS STRING
 LANGUAGE PYTHON
@@ -40,20 +43,12 @@ $$;
 
 -- COMMAND ----------
 
+-- DBTITLE 1,Encrypt a Sample Message Using UDF
 EXECUTE IMMEDIATE "select 
   IDENTIFIER(catalog_use || '.hv_claims.encrypt_text')('Spark is awesome', secret('encryptionCLM-demo', 'encryption_key')) as encrypted_text"
 
 -- COMMAND ----------
 
+-- DBTITLE 1,Decrypt the token to return the message
 EXECUTE IMMEDIATE "select
   IDENTIFIER(catalog_use || '.hv_claims.decrypt_text')('edc3528531b87f36999f27a9302f18ebec93a785b2dfc4c8a2c3468983538aa2', secret('encryptionCLM-demo', 'encryption_key')) as decrypted_text"
-
--- COMMAND ----------
-
-EXECUTE IMMEDIATE "select
-  IDENTIFIER(catalog_use || '.hv_claims.encrypt_text')('93af469dadce578e4e9f06baf77dcefd', secret('encryptionCLM-demo', 'encryption_key')) as encrypted_text"
-
--- COMMAND ----------
-
-EXECUTE IMMEDIATE "select
-  IDENTIFIER(catalog_use || '.hv_claims.decrypt_text')('b27255cf9a42956037a4aea4f80137a150a3b8a92cb298166e6b7468ec7a2837ec93a785b2dfc4c8a2c3468983538aa2', secret('encryptionCLM-demo', 'encryption_key')) as decrypted_text"

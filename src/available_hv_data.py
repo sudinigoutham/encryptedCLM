@@ -13,18 +13,21 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Set Catalog for Health Verity Sample Patient Claims Data Set
 # MAGIC %sql
 # MAGIC
 # MAGIC USE CATALOG healthverity_claims_sample_patient_dataset;
 
 # COMMAND ----------
 
+# DBTITLE 1,Set Schema for the Claims Sample
 # MAGIC %sql
 # MAGIC
 # MAGIC USE SCHEMA hv_claims_sample;
 
 # COMMAND ----------
 
+# DBTITLE 1,Declare and Set Array of Tables Available
 # MAGIC %sql
 # MAGIC
 # MAGIC DECLARE OR REPLACE VARIABLE table_list ARRAY<STRING> DEFAULT ARRAY("diagnosis");
@@ -37,9 +40,11 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Return Table List in Python
 table_list = spark.sql("select table_list").collect()[0].table_list
 print(table_list)
 
 # COMMAND ----------
 
+# DBTITLE 1,Set Task Values for the CRTAS For Each Task
 dbutils.jobs.taskValues.set(key = 'hv_tables', value = table_list)
