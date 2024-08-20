@@ -6,30 +6,6 @@ SELECT catalog_use;
 
 -- COMMAND ----------
 
--- CREATE OR REPLACE FUNCTION IDENTIFIER(catalog_use || '.hv_claims.encrypt_text') (input_text STRING, key STRING)
--- RETURNS STRING
--- LANGUAGE PYTHON
--- AS $$
---   import cryptography.fernet as fernet
---   cipher_suite = fernet.Fernet(key.encode())
---   encrypted_text = cipher_suite.encrypt_at_time(input_text.encode(), 1723705758)
---   return encrypted_text.decode()
--- $$;
-
--- COMMAND ----------
-
--- CREATE OR REPLACE FUNCTION IDENTIFIER(catalog_use || '.hv_claims.decrypt_text') (input_text STRING, key STRING)
--- RETURNS STRING
--- LANGUAGE PYTHON
--- AS $$
---   import cryptography.fernet as fernet
---   cipher_suite = fernet.Fernet(key.encode())
---   decrypted_text = cipher_suite.decrypt(input_text.encode())
---   return decrypted_text.decode()
--- $$;
-
--- COMMAND ----------
-
 CREATE OR REPLACE FUNCTION IDENTIFIER(catalog_use || '.hv_claims.encrypt_text') (input_text STRING, key STRING)
 RETURNS STRING
 LANGUAGE PYTHON
