@@ -18,7 +18,7 @@ AS $$
   backend = default_backend()
   cipher = Cipher(algorithms.AES(bytes.fromhex(key)), modes.ECB(), backend=backend)
   encryptor = cipher.encryptor()
-  padded_message = input_text + ' ' * (16 - len(input_text) % 16)  # Padding to ensure block size compatibility
+  padded_message = input_text + ' ' * (16 - len(input_text) % 16) 
   encrypted_message = encryptor.update(padded_message.encode()) + encryptor.finalize()
   return encrypted_message.hex()
 $$;
