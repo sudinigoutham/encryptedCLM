@@ -25,7 +25,7 @@
 # DBTITLE 1,Creating a New SQL Catalog if Absent
 # MAGIC %sql
 # MAGIC
-# MAGIC EXECUTE IMMEDIATE "create catalog if not exists new_catalog;" 
+# MAGIC --EXECUTE IMMEDIATE "create catalog if not exists new_catalog;" 
 
 # COMMAND ----------
 
