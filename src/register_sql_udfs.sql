@@ -51,4 +51,4 @@ EXECUTE IMMEDIATE "select
 
 -- DBTITLE 1,Decrypt the token to return the message
 EXECUTE IMMEDIATE "select
-  IDENTIFIER(catalog_use || '.hv_claims.decrypt_text')('edc3528531b87f36999f27a9302f18ebec93a785b2dfc4c8a2c3468983538aa2', secret('encryptionCLM-demo', 'encryption_key')) as decrypted_text"
+  IDENTIFIER(catalog_use || '.hv_claims.decrypt_text')('9a739ecbd5f09091ae8a1fd12116a02e8e91b2585a169c5c73eb80f5c682db93', secret('encryptionCLM-demo', 'encryption_key')) as decrypted_text"
