@@ -12,7 +12,7 @@ resources:
 
       email_notifications:
         on_failure:
-          - matthew.giglia@databricks.com
+          - goutham.sudini@molinahealthcare.com
 
       tasks:
         - task_key: catalog_schema_setup
@@ -130,4 +130,4 @@ resources:
         - name: bundle.target
           default: ${bundle.target}
         - name: bundle.catalog
-          default: mgiglia
+          default: molina_eim_lab_ws
