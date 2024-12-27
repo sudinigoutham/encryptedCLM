@@ -126,7 +126,7 @@ resources:
 
       parameters:
         - name: bundle.workspace.file_path
-          default: /Workspace${workspace.file_path}
+          default: ${workspace.file_path}
         - name: bundle.target
           default: ${bundle.target}
         - name: bundle.catalog
